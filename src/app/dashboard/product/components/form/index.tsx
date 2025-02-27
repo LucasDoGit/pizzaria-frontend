@@ -22,8 +22,6 @@ interface Props {
 export function Form({ categories }: Props){
     const [image, setImage] = useState<File>()
     const [previewImage, setPreviewImage] = useState("");
-
-    const token = getCookieClient();
     const router = useRouter();
 
     function handleFile(e: ChangeEvent<HTMLInputElement>){
@@ -59,7 +57,8 @@ export function Form({ categories }: Props){
         data.append("description", description)
         data.append("category_id", categories[Number(categoryIndex)].id)
         data.append("file", image)
-        
+
+        const token = getCookieClient();
 
         await api.post("/product", data, {
             headers: {
@@ -67,14 +66,13 @@ export function Form({ categories }: Props){
             }
         })
         .catch((error) => {
-            toast.error("Erro ao cadastrar produto!")
+            toast.warning("Erro ao cadastrar produto!")
             console.log(error)
             return;
         })
 
         toast.success("Produto cadastrado com sucesso!")
         router.push("/dashboard");
-        
     }
 
     return(
