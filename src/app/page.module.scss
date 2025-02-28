@@ -42,6 +42,11 @@
     transition: all 0.3s;
   }
 
+  form button.loginDemo {
+    background-color: #FFF;
+    color: #000;
+  }
+
   form button:hover{
     transform: scale(1.05);
   }

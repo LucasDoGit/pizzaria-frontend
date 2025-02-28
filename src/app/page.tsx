@@ -11,8 +11,8 @@ export default function Page(){
   async function handleLogin(formData: FormData){
     "use server"
 
-    const email = formData.get('email');
-    const password = formData.get('password');
+    let email = formData.get('email');
+    let password = formData.get('password');
 
     if(email === '' || password === ''){
       return
@@ -45,6 +45,38 @@ export default function Page(){
     redirect('/dashboard')
   }
 
+  async function handleLoginDemo(){
+    "use server"
+
+    const email = "demo@demo.com";
+    const password = "demo123";
+
+    try {
+      const response = await api.post('/session', {
+        email,
+        password
+      })
+
+      if(!response.data.token){
+        return
+      }
+
+      const expressTime = 60 * 60 * 24 * 30 * 1000;
+
+      cookies().set("session", response.data.token, {
+        maxAge: expressTime,
+        path: "/",
+        httpOnly: false,
+        secure: process.env.NODE_ENV === "production"
+      })
+
+    } catch (error) {
+      console.log('Error: ', error)
+    }
+
+    redirect('/dashboard')
+  }
+
   return(
     <>
       <div className={styles.containerCenter}>
@@ -55,10 +87,10 @@ export default function Page(){
 
         <section className={styles.login}>
           
-          <form action={handleLogin}>
+          <form>
               <input 
                 type="email" 
-                required
+                
                 name='email'
                 placeholder='Digite seu email...'
                 className={styles.input}
@@ -66,14 +98,18 @@ export default function Page(){
 
               <input 
                 type="password" 
-                required
+                
                 name='password'
                 placeholder='***************'
                 className={styles.input}
               />
 
-              <button type='submit' className={styles.button}>
+              <button formAction={handleLogin} type='submit' className={styles.button}>
                 Acessar
+              </button>
+
+              <button formAction={handleLoginDemo} className={styles.loginDemo}>
+                Login Demo
               </button>
           </form>
 
