@@ -35,7 +35,7 @@ export default function Category(){
 
     return(
         <main className={styles.container}>
-            <h1>Página Category</h1>
+            <h1>Cadastrar categoria</h1>
 
             <form
                 className={styles.form}
